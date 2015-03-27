@@ -1,0 +1,8 @@
+.git
+.gitignore
+.idea
+.mako
+.tmp
+.idea
+node_modules
+npm-debug.log

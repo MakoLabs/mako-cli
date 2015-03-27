@@ -1,0 +1,54 @@
+#!/usr/bin/env node
+'use strict';
+
+var program  = require('commander');
+var path = require('path');
+var shelljs = require('shelljs');
+
+var distro = {};
+program.distro = distro;
+distro.destDir = path.join(process.cwd(), '.mako');
+distro.localDir = path.join(distro.destDir, '.local');
+distro.sourceDir = process.cwd();
+distro.excludeFile = path.join(distro.localDir, '.exclude');
+distro.nodeModulesDir = path.join(distro.sourceDir, 'node_modules');
+distro.nodeModulesZip = path.join(distro.destDir, 'node_modules.zip');
+distro.configFile = path.join(distro.localDir, 'config.json');
+distro.manifestFile = path.join(distro.localDir, 'manifest.json');
+
+
+
+
+if (!shelljs.test('-f', 'package.json')){
+    console.log('Could not detect node module; package.json missing; ')
+    process.exit(1);
+}
+
+try {
+    distro.package = JSON.parse(shelljs.cat('package.json'));
+} catch (e) {
+    console.log('Invalid package.json', e);
+}
+
+//base
+require('autocmdr/lib/logger')(program);
+require('autocmdr/lib/completion')(program);
+require('autocmdr/lib/package')(program);
+require('autocmdr/lib/config')(program, {path: distro.configFile});
+require('autocmdr/lib/help')(program);
+
+//load custom last
+require('autocmdr/lib/loader')(program);
+
+
+
+
+
+program
+	.parse(process.argv);
+
+if (program.args.length < 1 ) {
+	console.log('No command specified. See \'mako --help\':');
+	program.outputHelp();
+	process.exit(1);
+}

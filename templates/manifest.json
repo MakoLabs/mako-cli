@@ -1,0 +1,23 @@
+{
+    "{{name}}-{{id}}": {
+        "instances": "{{instances}}",
+        "load": 1,
+        "routing": {
+            "domain": "{{domain}}"
+        },
+        "opts": {
+            "setup": [
+                "unzip",
+                "node_modules.zip"
+            ],
+            "command": [
+                "node",
+                "{{main}}"
+            ],
+            "commit": "LATEST",
+            "env": {
+                "PORT": "RANDOM_PORT"
+            }
+        }
+    }
+}
